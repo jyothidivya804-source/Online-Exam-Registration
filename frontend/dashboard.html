@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">Online Exam Registration</div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="exams.html">Exams</a>
+            <a href="status.html">Application Status</a>
+            <a href="index.html" data-logout>Logout</a>
+        </div>
+    </nav>
+
+    <main id="dashboardContent" class="dashboard-container">
+        <p id="dashboardMessage" class="form-message" role="alert" hidden></p>
+        <section class="about">
+
+            <h1>Student Dashboard</h1>
+
+            <h2>Welcome, <span id="studentName">Student</span></h2>
+
+            <p><strong>Email:</strong> <span id="studentEmail"></span></p>
+            <p><strong>Mobile:</strong> <span id="studentMobile"></span></p>
+            <p><strong>Education:</strong> <span id="studentQualification"></span></p>
+
+        </section>
+
+        <section class="features">
+            <h2>Your exam applications</h2>
+            <div id="applicationList" class="application-list">
+                <p>Loading your applications…</p>
+            </div>
+        </section>
+
+        <p><a class="main-button" href="exams.html">Browse exams</a></p>
+    </main>
+
+    <footer>
+        <p>© 2026 Online Exam Registration System</p>
+    </footer>
+
+</body>
+
+</html>

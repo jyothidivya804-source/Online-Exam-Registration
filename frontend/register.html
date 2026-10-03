@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Exam Registration</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #174ea6, #2563eb);
+            color: white;
+            padding: 22px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .header nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 14px;
+        }
+
+        .header nav a {
+            color: white;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1050px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+        }
+
+        .progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .progress::before {
+            content: "";
+            position: absolute;
+            top: 19px;
+            left: 8%;
+            right: 8%;
+            height: 3px;
+            background: #d9e1ef;
+            z-index: 0;
+        }
+
+        .step {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            width: 20%;
+        }
+
+        .circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #d9e1ef;
+            color: #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            font-weight: bold;
+        }
+
+        .step.active .circle {
+            background: #2563eb;
+            color: white;
+        }
+
+        .step.completed .circle {
+            background: #16a34a;
+            color: white;
+        }
+
+        .step p {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .step.active p {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .title {
+            margin-bottom: 25px;
+        }
+
+        .title h2 {
+            color: #174ea6;
+            margin-bottom: 6px;
+        }
+
+        .title p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #333;
+        }
+
+        label span {
+            color: red;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            outline: none;
+            font-size: 14px;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 12px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .back-btn {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        .back-btn:hover {
+            background: #d1d5db;
+        }
+
+        .next-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .next-btn:hover {
+            background: #174ea6;
+        }
+
+        .submit-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background: #15803d;
+        }
+
+        .review-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .review-box h3 {
+            color: #174ea6;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 30px;
+        }
+
+        .review-item {
+            font-size: 14px;
+            padding: 7px 0;
+            word-break: break-word;
+        }
+
+        .review-item strong {
+            color: #444;
+        }
+
+        .success-box {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            margin: 0 auto 20px;
+        }
+
+        .success-box h2 {
+            color: #15803d;
+            margin-bottom: 10px;
+        }
+
+        .application-number {
+            background: #eff6ff;
+            border: 2px dashed #2563eb;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 400px;
+            border-radius: 8px;
+        }
+
+        .application-number span {
+            display: block;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .application-number strong {
+            font-size: 22px;
+            color: #174ea6;
+            letter-spacing: 1px;
+        }
+
+        .home-btn {
+            background: #2563eb;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .form-message {
+            margin-top: 16px;
+            color: #a61b1b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                width: 96%;
+                padding: 20px;
+            }
+
+            .form-grid,
+            .review-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress::before {
+                display: none;
+            }
+
+            .step p {
+                font-size: 10px;
+            }
+
+            .circle {
+                width: 34px;
+                height: 34px;
+            }
+
+            .header {
+                padding: 18px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .header nav {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Online Exam Registration</h1>
+    <p>Register for Board, Entrance and Competitive Examinations</p>
+    <nav aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="exams.html">Exams</a>
+        <a href="login.html">Student Login</a>
+        <a href="status.html">Application Status</a>
+    </nav>
+</div>
+
+<div class="container">
+
+    <!-- PROGRESS BAR -->
+
+    <div class="progress" id="progressBar">
+
+        <div class="step active" id="progress1">
+            <div class="circle">1</div>
+            <p>Personal</p>
+        </div>
+
+        <div class="step" id="progress2">
+            <div class="circle">2</div>
+            <p>Exam</p>
+        </div>
+
+        <div class="step" id="progress3">
+            <div class="circle">3</div>
+            <p>Education</p>
+        </div>
+
+        <div class="step" id="progress4">
+            <div class="circle">4</div>
+            <p>Review</p>
+        </div>
+
+        <div class="step" id="progress5">
+            <div class="circle">5</div>
+            <p>Submit</p>
+        </div>
+
+    </div>
+
+
+    <!-- STEP 1: PERSONAL DETAILS -->
+
+    <div class="form-step active" id="step1">
+
+        <div class="title">
+            <h2>1. Personal Details</h2>
+            <p>Enter the candidate's basic personal information.</p>
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    First Name <span>*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="firstName"
+                    placeholder="Enter first name"
+                    maxlength="100"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Last Name <span>*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="lastName"
+                    placeholder="Enter last name"
+                    maxlength="100"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Father Name
+                </label>
+
+                <input
+                    type="text"
+                    id="fatherName"
+                    placeholder="Enter father's name"
+                    maxlength="150"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Date of Birth <span>*</span>
+                </label>
+
+                <input
+                    type="date"
+                    id="dob"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Gender <span>*</span>
+                </label>
+
+                <select id="gender" required>
+
+                    <option value="">
+                        Select Gender
+                    </option>
+
+                    <option value="Male">
+                        Male
+                    </option>
+
+                    <option value="Female">
+                        Female
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Mobile Number <span>*</span>
+                </label>
+
+                <input
+                    type="tel"
+                    id="mobile"
+                    placeholder="Enter mobile number"
+                    maxlength="20"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group full">
+
+                <label>
+                    Email ID <span>*</span>
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter email address"
+                    maxlength="254"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password <span>*</span></label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="At least 8 characters"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password <span>*</span></label>
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Re-enter your password"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <div></div>
+
+            <button
+                class="next-btn"
+                type="button"
+                onclick="nextStep(1)"
+            >
+                Next →
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- STEP 2: EXAM DETAILS -->
+
+    <div class="form-step" id="step2">
+
+        <div class="title">
+
+            <h2>2. Examination Details</h2>
+
+            <p>
+                Select the examination you want to register for.
+            </p>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+            <!-- EXAM NAME -->
+
+            <div class="form-group">
+
+                <label>
+                    Exam Name <span>*</span>
+                </label>
+
+                <select id="examName" required>
+
+                    <option value="">
+                        Select Examination
+                    </option>
+
+                    <option value="10th Board Exam">
+                        10th Board Exam
+                    </option>
+
+                    <option value="Intermediate Board Exam">
+                        Intermediate Board Exam
+                    </option>
+
+                    <option value="ESET">
+                        ESET
+                    </option>
+
+                    <option value="AIMSET">
+                        AIMSET
+                    </option>
+
+                    <option value="JEA">
+                        JEA
+                    </option>
+
+                    <option value="Diploma Entrance Exam">
+                        Diploma Entrance Exam
+                    </option>
+
+                    <option value="B.Tech Entrance Exam">
+                        B.Tech Entrance Exam
+                    </option>
+
+                    <option value="Degree Entrance Exam">
+                        Degree Entrance Exam
+                    </option>
+
+                    <option value="Other Entrance Exam">
+                        Other Entrance Exam
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- EXAM LEVEL -->
+
+            <div class="form-group">
+
+                <label>
+                    Exam Level <span>*</span>
+                </label>
+
+                <select id="examLevel" required>
+
+                    <option value="">
+                        Select Exam Level
+                    </option>
+
+                    <option value="10th">
+                        10th
+                    </option>
+
+                    <option value="Intermediate">
+                        Intermediate
+                    </option>
+
+                    <option value="Diploma">
+                        Diploma
+                    </option>
+
+                    <option value="B.Tech">
+                        B.Tech
+                    </option>
+
+                    <option value="Degree">
+                        Degree
+                    </option>
+
+                    <option value="Post Graduation">
+                        Post Graduation
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- EXAM CENTRE -->
+
+            <div class="form-group full">
+
+                <label>
+                    Exam Centre <span>*</span>
+                </label>
+
+                <select id="examCenter" required>
+
+                    <option value="">
+                        Select Exam Centre
+                    </option>
+
+                    <option value="Hyderabad">
+                        Hyderabad
+                    </option>
+
+                    <option value="Sangareddy">
+                        Sangareddy
+                    </option>
+
+                    <option value="Warangal">
+                        Warangal
+                    </option>
+
+                    <option value="Karimnagar">
+                        Karimnagar
+                    </option>
+
+                    <option value="Nizamabad">
+                        Nizamabad
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <button
+                class="back-btn"
+                type="button"
+                onclick="previousStep(2)"
+            >
+                ← Back
+            </button>
+
+            <button
+                class="next-btn"
+                type="button"
+                onclick="nextStep(2)"
+            >
+                Next →
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- STEP 3: EDUCATION DETAILS -->
+
+    <div class="form-step" id="step3">
+
+        <div class="title">
+
+            <h2>3. Education Details</h2>
+
+            <p>
+                Enter what you studied and where you studied.
+            </p>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+            <!-- HIGHEST QUALIFICATION -->
+
+            <div class="form-group">
+
+                <label>
+                    Highest Qualification <span>*</span>
+                </label>
+
+                <select id="qualification" required>
+
+                    <option value="">
+                        Select Qualification
+                    </option>
+
+                    <option value="10th / SSC">
+                        10th / SSC
+                    </option>
+
+                    <option value="Intermediate / 12th">
+                        Intermediate / 12th
+                    </option>
+
+                    <option value="Diploma">
+                        Diploma
+                    </option>
+
+                    <option value="B.Tech">
+                        B.Tech
+                    </option>
+
+                    <option value="Degree">
+                        Degree
+                    </option>
+
+                    <option value="Post Graduation">
+                        Post Graduation
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- COURSE / BRANCH -->
+
+            <div class="form-group">
+
+                <label>
+                    Course / Branch
+                </label>
+
+                <input
+                    type="text"
+                    id="course"
+                    placeholder="Example: CSE, ECE, MPC"
+                >
+
+            </div>
+
+
+            <!-- SCHOOL / COLLEGE -->
+
+            <div class="form-group full">
+
+                <label>
+                    School / College Name
+                </label>
+
+                <input
+                    type="text"
+                    id="institution"
+                    placeholder="Enter school or college name"
+                >
+
+            </div>
+
+
+            <!-- BOARD / UNIVERSITY -->
+
+            <div class="form-group">
+
+                <label>
+                    Board / University
+                </label>
+
+                <input
+                    type="text"
+                    id="board"
+                    placeholder="Example: JNTUH, Telangana Board"
+                >
+
+            </div>
+
+
+            <!-- PASSING YEAR -->
+
+            <div class="form-group">
+
+                <label>
+                    Passing Year
+                </label>
+
+                <select id="passingYear">
+
+                    <option value="">
+                        Select Year
+                    </option>
+
+                    <option value="2026">
+                        2026
+                    </option>
+
+                    <option value="2025">
+                        2025
+                    </option>
+
+                    <option value="2024">
+                        2024
+                    </option>
+
+                    <option value="2023">
+                        2023
+                    </option>
+
+                    <option value="2022">
+                        2022
+                    </option>
+
+                    <option value="2021">
+                        2021
+                    </option>
+
+                    <option value="2020">
+                        2020
+                    </option>
+
+                    <option value="2019">
+                        2019
+                    </option>
+
+                    <option value="2018">
+                        2018
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PERCENTAGE / CGPA -->
+
+            <div class="form-group">
+
+                <label>
+                    Percentage / CGPA
+                </label>
+
+                <input
+                    type="text"
+                    id="marks"
+                    placeholder="Example: 85% or 8.5 CGPA"
+                >
+
+            </div>
+
+
+            <!-- ROLL NUMBER -->
+
+            <div class="form-group">
+
+                <label>
+                    Roll Number
+                </label>
+
+                <input
+                    type="text"
+                    id="rollNumber"
+                    placeholder="Enter roll number"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="buttons">
+
+            <button
+                class="back-btn"
+                type="button"
+                onclick="previousStep(3)"
+            >
+                ← Back
+            </button>
+
+            <button
+                class="next-btn"
+                type="button"
+                onclick="nextStep(3)"
+            >
+                Review →
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- STEP 4: REVIEW -->
+
+    <div class="form-step" id="step4">
+
+        <div class="title">
+
+            <h2>4. Review Your Details</h2>
+
+            <p>
+                Review the information before submitting your registration.
+            </p>
+
+        </div>
+
+
+        <!-- PERSONAL DETAILS REVIEW -->
+
+        <div class="review-box">
+
+            <h3>
+                Personal Details
+            </h3>
+
+            <div class="review-grid">
+
+                <div class="review-item">
+                    <strong>First Name:</strong>
+                    <span id="reviewFirstName"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Last Name:</strong>
+                    <span id="reviewLastName"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Father Name:</strong>
+                    <span id="reviewFatherName"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Date of Birth:</strong>
+                    <span id="reviewDob"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Gender:</strong>
+                    <span id="reviewGender"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Mobile:</strong>
+                    <span id="reviewMobile"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Email:</strong>
+                    <span id="reviewEmail"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EXAM DETAILS REVIEW -->
+
+        <div class="review-box">
+
+            <h3>
+                Examination Details
+            </h3>
+
+            <div class="review-grid">
+
+                <div class="review-item">
+                    <strong>Exam Name:</strong>
+                    <span id="reviewExam"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Exam Level:</strong>
+                    <span id="reviewExamLevel"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Exam Centre:</strong>
+                    <span id="reviewCenter"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EDUCATION DETAILS REVIEW -->
+
+        <div class="review-box">
+
+            <h3>
+                Education Details
+            </h3>
+
+            <div class="review-grid">
+
+                <div class="review-item">
+                    <strong>Qualification:</strong>
+                    <span id="reviewQualification"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Course / Branch:</strong>
+                    <span id="reviewCourse"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>School / College:</strong>
+                    <span id="reviewInstitution"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Board / University:</strong>
+                    <span id="reviewBoard"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Passing Year:</strong>
+                    <span id="reviewPassingYear"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Percentage / CGPA:</strong>
+                    <span id="reviewMarks"></span>
+                </div>
+
+                <div class="review-item">
+                    <strong>Roll Number:</strong>
+                    <span id="reviewRollNumber"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="buttons">
+
+            <button
+                class="back-btn"
+                type="button"
+                onclick="previousStep(4)"
+            >
+                ← Back
+            </button>
+
+            <button
+                class="next-btn"
+                type="button"
+                onclick="nextStep(4)"
+            >
+                Continue →
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- STEP 5: SUBMIT -->
+
+    <div class="form-step" id="step5">
+
+        <div class="title">
+
+            <h2>
+                5. Submit Registration
+            </h2>
+
+            <p>
+                Confirm your details and complete the registration.
+            </p>
+
+        </div>
+
+
+        <div class="review-box">
+
+            <h3>
+                Registration Confirmation
+            </h3>
+
+            <p style="line-height: 1.8; color: #555;">
+
+                Your registration details have been entered successfully.
+                Click <strong>Submit Registration</strong> to complete the process.
+
+            </p>
+
+        </div>
+
+        <p class="form-message" id="registrationMessage" role="alert" hidden></p>
+
+        <div class="buttons">
+
+            <button
+                class="back-btn"
+                type="button"
+                onclick="previousStep(5)"
+            >
+                ← Back
+            </button>
+
+            <button
+                class="submit-btn"
+                type="button"
+                onclick="submitRegistration()"
+            >
+                Submit Registration
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUCCESS -->
+
+    <div
+        class="success-box"
+        id="successBox"
+    >
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+
+        <h2>
+            Registration Successful!
+        </h2>
+
+
+        <p>
+            Your examination registration has been submitted successfully.
+        </p>
+
+
+        <div class="application-number">
+
+            <span>
+                Your Application Number
+            </span>
+
+            <strong id="applicationNumber">
+                APP000000
+            </strong>
+
+        </div>
+
+
+        <p style="color: #666; font-size: 14px;">
+
+            Please save your application number for future reference.
+
+        </p>
+
+
+        <button
+            class="home-btn"
+            type="button"
+            onclick="location.href='index.html'"
+        >
+            Go to Home
+        </button>
+        <p><a href="login.html">Sign in to your student dashboard</a></p>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+<script>
+
+    let currentStep = 1;
+
+
+    /* SHOW STEP */
+
+    function showStep(step) {
+
+        document
+            .querySelectorAll(".form-step")
+            .forEach(function(element) {
+
+                element.classList.remove("active");
+
+            });
+
+
+        document
+            .getElementById("step" + step)
+            .classList.add("active");
+
+
+        currentStep = step;
+
+
+        updateProgress(step);
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    /* NEXT STEP */
+
+    function nextStep(step) {
+
+        const currentSection = document.getElementById("step" + currentStep);
+        document.getElementById("confirmPassword").setCustomValidity("");
+        const requiredFields = currentSection.querySelectorAll("[required]");
+        for (const field of requiredFields) {
+            if (!field.reportValidity()) {
+                return;
+            }
+        }
+
+        if (currentStep === 1
+                && getValue("password") !== getValue("confirmPassword")) {
+            document.getElementById("confirmPassword").setCustomValidity(
+                "Passwords do not match."
+            );
+            document.getElementById("confirmPassword").reportValidity();
+            return;
+        }
+        if (step === 3) {
+
+            fillReview();
+
+        }
+
+
+        if (step < 5) {
+
+            showStep(step + 1);
+
+        }
+
+    }
+
+
+    /* PREVIOUS STEP */
+
+    function previousStep(step) {
+
+        if (step > 1) {
+
+            showStep(step - 1);
+
+        }
+
+    }
+
+
+    /* UPDATE PROGRESS */
+
+    function updateProgress(step) {
+
+        for (let i = 1; i <= 5; i++) {
+
+            const progress =
+                document.getElementById("progress" + i);
+
+
+            progress.classList.remove(
+                "active",
+                "completed"
+            );
+
+
+            if (i < step) {
+
+                progress.classList.add(
+                    "completed"
+                );
+
+            }
+
+
+            if (i === step) {
+
+                progress.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /* GET VALUE */
+
+    function getValue(id) {
+
+        const element =
+            document.getElementById(id);
+
+
+        if (!element) {
+
+            return "";
+
+        }
+
+
+        return element.value || "";
+
+    }
+
+
+    /* FILL REVIEW DETAILS */
+
+    function fillReview() {
+
+        /* PERSONAL */
+
+        document
+            .getElementById("reviewFirstName")
+            .textContent =
+            getValue("firstName");
+
+
+        document
+            .getElementById("reviewLastName")
+            .textContent =
+            getValue("lastName");
+
+
+        document
+            .getElementById("reviewFatherName")
+            .textContent =
+            getValue("fatherName");
+
+
+        document
+            .getElementById("reviewDob")
+            .textContent =
+            getValue("dob");
+
+
+        document
+            .getElementById("reviewGender")
+            .textContent =
+            getValue("gender");
+
+
+        document
+            .getElementById("reviewMobile")
+            .textContent =
+            getValue("mobile");
+
+
+        document
+            .getElementById("reviewEmail")
+            .textContent =
+            getValue("email");
+
+
+        /* EXAM */
+
+        document
+            .getElementById("reviewExam")
+            .textContent =
+            getValue("examName");
+
+
+        document
+            .getElementById("reviewExamLevel")
+            .textContent =
+            getValue("examLevel");
+
+
+        document
+            .getElementById("reviewCenter")
+            .textContent =
+            getValue("examCenter");
+
+
+        /* EDUCATION */
+
+        document
+            .getElementById("reviewQualification")
+            .textContent =
+            getValue("qualification");
+
+
+        document
+            .getElementById("reviewCourse")
+            .textContent =
+            getValue("course");
+
+
+        document
+            .getElementById("reviewInstitution")
+            .textContent =
+            getValue("institution");
+
+
+        document
+            .getElementById("reviewBoard")
+            .textContent =
+            getValue("board");
+
+
+        document
+            .getElementById("reviewPassingYear")
+            .textContent =
+            getValue("passingYear");
+
+
+        document
+            .getElementById("reviewMarks")
+            .textContent =
+            getValue("marks");
+
+
+        document
+            .getElementById("reviewRollNumber")
+            .textContent =
+            getValue("rollNumber");
+
+    }
+
+
+    /* SUBMIT REGISTRATION */
+
+    async function submitRegistration() {
+        const message = document.getElementById("registrationMessage");
+        const submitButton = document.querySelector("#step5 .submit-btn");
+        message.hidden = true;
+        submitButton.disabled = true;
+
+        try {
+            const result = await window.ExamRegistration.post("/register", {
+                firstName: getValue("firstName"),
+                lastName: getValue("lastName"),
+                fatherName: getValue("fatherName"),
+                dob: getValue("dob"),
+                gender: getValue("gender"),
+                mobile: getValue("mobile"),
+                email: getValue("email"),
+                password: getValue("password"),
+                examName: getValue("examName"),
+                examLevel: getValue("examLevel"),
+                examCenter: getValue("examCenter"),
+                qualification: getValue("qualification"),
+                course: getValue("course"),
+                institution: getValue("institution"),
+                board: getValue("board"),
+                passingYear: getValue("passingYear"),
+                marks: getValue("marks"),
+                rollNumber: getValue("rollNumber")
+            });
+
+            document.getElementById("applicationNumber").textContent =
+                result.applicationNumber;
+            document.querySelectorAll(".form-step").forEach(function (element) {
+                element.style.display = "none";
+            });
+            document.getElementById("progressBar").style.display = "none";
+            document.getElementById("successBox").style.display = "block";
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (error) {
+            message.textContent = error.message
+                || "Cannot connect to the Java server. Make sure the API is running.";
+            message.hidden = false;
+        } finally {
+            submitButton.disabled = false;
+        }
+    }
+
+</script>
+
+</body>
+</html>

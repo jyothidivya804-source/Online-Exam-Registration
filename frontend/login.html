@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Login</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">Online Exam Registration</div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="exams.html">Exams</a>
+            <a href="register.html">Register</a>
+            <a href="status.html">Application Status</a>
+        </div>
+    </nav>
+
+    <main class="auth-container">
+    <form class="auth-card" id="loginForm">
+
+        <h2>Student Login</h2>
+
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="Enter your email"
+               autocomplete="email" required>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password"
+               autocomplete="current-password" required>
+
+        <button class="main-button" type="submit">Login</button>
+        <p id="loginMessage" class="form-message" role="alert" hidden></p>
+
+        <p>
+            New student?
+            <a href="register.html">Register here</a>
+        </p>
+
+    </form>
+    </main>
+
+</body>
+
+</html>

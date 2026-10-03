@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Status | Online Exam Registration</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <style>
+        .status-header {
+            background: #173b72;
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+        .status-header h1 {
+            margin: 0;
+            font-size: 21px;
+        }
+        .status-header a,
+        .status-header a:visited {
+            color: white;
+            text-decoration: none;
+        }
+        .status-container {
+            width: min(650px, 92%);
+            margin: 42px auto;
+        }
+        .status-card {
+            margin-top: 20px;
+            padding: 20px;
+            border-left: 5px solid #173b72;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .status-card h3 {
+            margin: 0 0 12px;
+            color: #173b72;
+        }
+        .status-card .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .status-card .row:last-child {
+            border-bottom: 0;
+        }
+        .status-card .row span {
+            color: #666;
+        }
+        .status-card .row strong {
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+        #result[hidden] {
+            display: none;
+        }
+        #result:not([hidden]) {
+            display: block;
+        }
+        .status-form label {
+            display: block;
+            margin: 18px 0 7px;
+            font-weight: bold;
+        }
+        .status-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font: inherit;
+        }
+        .status-form button {
+            width: 100%;
+            margin: 22px 0 8px;
+        }
+        @media (max-width: 520px) {
+            .status-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            .status-card .row {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .status-card .row strong {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="status-header">
+        <h1>Online Exam Registration</h1>
+        <nav aria-label="Main navigation">
+            <a href="index.html">Home</a>
+            <a href="exams.html">Exams</a>
+            <a href="login.html">Student Login</a>
+        </nav>
+    </header>
+    <main class="status-container">
+        <section class="card">
+            <h2>Check Application Status</h2>
+            <p>Enter your application number and date of birth to view your application status.</p>
+            <form id="statusForm" class="status-form">
+                <label for="applicationNumber">Application Number</label>
+                <input type="text" id="applicationNumber"
+                       placeholder="Example: APP2026A1B2C3D4E5F6" required>
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" required>
+                <button class="main-button" type="submit">Check Application Status</button>
+            </form>
+            <div id="result" aria-live="polite" hidden></div>
+            <a href="register.html" class="back-link">← Apply for Examination</a>
+        </section>
+    </main>
+</body>
+</html>
