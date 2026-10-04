@@ -1,5 +1,0 @@
-<?php
-session_start(); require "../config/database.php"; $msg="";
-if($_SERVER["REQUEST_METHOD"]==="POST"){ $email=trim($_POST["email"]);$password=$_POST["password"]; $s=$conn->prepare("SELECT id,password FROM admins WHERE email=?");$s->bind_param("s",$email);$s->execute();$a=$s->get_result()->fetch_assoc();if($a&&password_verify($password,$a["password"])){$_SESSION["admin_id"]=$a["id"];header("Location: dashboard.php");exit;}$msg="Invalid admin credentials."; }
-?>
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Login</title><link rel="stylesheet" href="../css/style.css"></head><body><div class="auth"><form class="card" method="post"><h2>Admin Login</h2><?php if($msg):?><div class="alert"><?=$msg?></div><?php endif;?><label>Email</label><input type="email" name="email" required><label>Password</label><input type="password" name="password" required><button class="btn full">Login</button><p><a href="../index.php">← Home</a></p></form></div></body></html>
